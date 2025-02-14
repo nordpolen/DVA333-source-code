@@ -188,228 +188,228 @@ def car_steering():
     print(f"Listening for VLAN-tagged packets on eth0...")
     buffer = ""
 
-def set_pwm(pwm_path, duty_cycle, frequency=1000):
-    """
-    Configures a PWM channel with the specified duty cycle and frequency.
-    Args:
-    pwm_path (str): Path to the PWM channel.
-    duty_cycle (int): Duty cycle percentage (0-100).
-    frequency (int): PWM frequency in Hz.
-    """
-    if duty_cycle < 0 or duty_cycle > 100:
-        print(f"Invalid duty_cycle value: {duty_cycle}")
-        return
-    period_ns = int(1e9 / frequency)
-    duty_cycle_ns = int(period_ns * (duty_cycle / 100))
-    try:
-        with open(pwm_path + "period", "w") as f:
-            f.write(f"{period_ns}")
-        with open(pwm_path + "duty_cycle", "w") as f:
-            f.write(f"{duty_cycle_ns}")
-        with open(pwm_path + "enable", "w") as f:
-            f.write("1")
-    except Exception as e:
-        print(f"Error setting PWM: {e}")
+    def set_pwm(pwm_path, duty_cycle, frequency=1000):
+        """
+        Configures a PWM channel with the specified duty cycle and frequency.
+        Args:
+        pwm_path (str): Path to the PWM channel.
+        duty_cycle (int): Duty cycle percentage (0-100).
+        frequency (int): PWM frequency in Hz.
+        """
+        if duty_cycle < 0 or duty_cycle > 100:
+            print(f"Invalid duty_cycle value: {duty_cycle}")
+            return
+        period_ns = int(1e9 / frequency)
+        duty_cycle_ns = int(period_ns * (duty_cycle / 100))
+        try:
+            with open(pwm_path + "period", "w") as f:
+                f.write(f"{period_ns}")
+            with open(pwm_path + "duty_cycle", "w") as f:
+                f.write(f"{duty_cycle_ns}")
+            with open(pwm_path + "enable", "w") as f:
+                f.write("1")
+        except Exception as e:
+            print(f"Error setting PWM: {e}")
 
-def stop():
-    for pin in pins.values():
-        set_gpio(pin, 0)
-    stop_pwm(pwm_ena_path)
-    stop_pwm(pwm_enb_path)
-    print("Stopped")
+        def stop():
+            for pin in pins.values():
+                set_gpio(pin, 0)
+            stop_pwm(pwm_ena_path)
+            stop_pwm(pwm_enb_path)
+            print("Stopped")
 
-def stop_pwm(pwm_path):
-    try:
-        with open(pwm_path + "enable", "w") as f:
-            f.write("0")
-    except OSError as e:
-        print(f"Failed to disable PWM at {pwm_path}: {e}")
+        def stop_pwm(pwm_path):
+            try:
+                with open(pwm_path + "enable", "w") as f:
+                    f.write("0")
+            except OSError as e:
+                print(f"Failed to disable PWM at {pwm_path}: {e}")
 
-def set_gpio(pin, value):
-    subprocess.run(["gpioset", "gpiochip0", f"{pin}={value}"])
+        def set_gpio(pin, value):
+            subprocess.run(["gpioset", "gpiochip0", f"{pin}={value}"])
 
-def advance_with_turn(left_duty_cycle, right_duty_cycle):
-    set_gpio(pins['IN1'], 1)
-    set_gpio(pins['IN2'], 0)
-    set_gpio(pins['IN3'], 1)
-    set_gpio(pins['IN4'], 0)
-    set_pwm(pwm_ena_path, left_duty_cycle)
-    set_pwm(pwm_enb_path, right_duty_cycle)
-    print("Advancing...")
+        def advance_with_turn(left_duty_cycle, right_duty_cycle):
+            set_gpio(pins['IN1'], 1)
+            set_gpio(pins['IN2'], 0)
+            set_gpio(pins['IN3'], 1)
+            set_gpio(pins['IN4'], 0)
+            set_pwm(pwm_ena_path, left_duty_cycle)
+            set_pwm(pwm_enb_path, right_duty_cycle)
+            print("Advancing...")
 
-def reverse_with_turn(left_duty_cycle, right_duty_cycle):
-    set_gpio(pins['IN1'], 0)
-    set_gpio(pins['IN2'], 1)
-    set_gpio(pins['IN3'], 0)
-    set_gpio(pins['IN4'], 1)
-    set_pwm(pwm_ena_path, left_duty_cycle)
-    set_pwm(pwm_enb_path, right_duty_cycle)
-    print("Reversing...")
+        def reverse_with_turn(left_duty_cycle, right_duty_cycle):
+            set_gpio(pins['IN1'], 0)
+            set_gpio(pins['IN2'], 1)
+            set_gpio(pins['IN3'], 0)
+            set_gpio(pins['IN4'], 1)
+            set_pwm(pwm_ena_path, left_duty_cycle)
+            set_pwm(pwm_enb_path, right_duty_cycle)
+            print("Reversing...")
 
-def turn_right(left_duty_cycle, right_duty_cycle):
-    set_gpio(pins['IN1'], 1)
-    set_gpio(pins['IN2'], 0)
-    set_gpio(pins['IN3'], 0)
-    set_gpio(pins['IN4'], 1)
-    set_pwm(pwm_ena_path, left_duty_cycle)
-    set_pwm(pwm_enb_path, right_duty_cycle)
-    print("Turning right...")
+        def turn_right(left_duty_cycle, right_duty_cycle):
+            set_gpio(pins['IN1'], 1)
+            set_gpio(pins['IN2'], 0)
+            set_gpio(pins['IN3'], 0)
+            set_gpio(pins['IN4'], 1)
+            set_pwm(pwm_ena_path, left_duty_cycle)
+            set_pwm(pwm_enb_path, right_duty_cycle)
+            print("Turning right...")
 
-def turn_left(left_duty_cycle, right_duty_cycle):
-    set_gpio(pins['IN1'], 0)
-    set_gpio(pins['IN2'], 1)
-    set_gpio(pins['IN3'], 1)
-    set_gpio(pins['IN4'], 0)
-    set_pwm(pwm_ena_path, left_duty_cycle)
-    set_pwm(pwm_enb_path, right_duty_cycle)
-    print("Turning left...")
+        def turn_left(left_duty_cycle, right_duty_cycle):
+            set_gpio(pins['IN1'], 0)
+            set_gpio(pins['IN2'], 1)
+            set_gpio(pins['IN3'], 1)
+            set_gpio(pins['IN4'], 0)
+            set_pwm(pwm_ena_path, left_duty_cycle)
+            set_pwm(pwm_enb_path, right_duty_cycle)
+            print("Turning left...")
 
-def process_message(msg):
-    """
-    Processes steering commands received from the network.
-    Args:
-    msg (str): Command message in the format "<timestamp>,<left_duty_cycle>,
-    <right_duty_cycle>,<direction>".
-    """
-    try:
-        print(f"Processing message: {msg}")
-        parts = msg.split(",")
-        if len(parts) != 4:
-            raise ValueError(f"Incorrect message format: {msg}")
-        
-        left_duty_cycle = int(parts[1])
-        right_duty_cycle = int(parts[2])
-        direction = int(parts[3])
-
-        # Actions based on direction
-        if direction == 0:
-            stop()
-        elif direction == 1:
-            advance_with_turn(left_duty_cycle, right_duty_cycle)
-        elif direction == -1:
-            reverse_with_turn(left_duty_cycle, right_duty_cycle)
-        elif direction == 2:
-            turn_right(left_duty_cycle, right_duty_cycle)
-        elif direction == -2:
-            turn_left(left_duty_cycle, right_duty_cycle)
-        else:
-            print(f"Unknown direction: {direction}")
-    except ValueError as ve:
-        print(f"Error in process_message: {ve}")
-    except Exception as e:
-        print(f"Unexpected error in process_message: {e}")
-
-    try:
-        while True:
-            # Receive a packet from the raw socket
-            packet, addr = raw_sock.recvfrom(65536)
-            print("Received packet from Gateway...")
-
-            # Extract Ethernet header (14 bytes)
-            eth_header = packet[:14]
-            dest_mac, src_mac, ethertype = struct.unpack("!6s6sH", eth_header)
-            print("Ethernet Header Analysis:")
-            print(f" Destination MAC: {dest_mac.hex()} (bytes: {dest_mac})")
-            print(f" Source MAC: {src_mac.hex()} (bytes: {src_mac})")
-            print(f" Ethertype: {hex(ethertype)}")
-
-            # Check if the packet is VLAN-tagged
-            if ethertype == 0x8100 or ethertype == 0x0800:
-                print("Identified VLAN packet!" if ethertype == 0x8100 else "Identified IPv4 packet!")
-                if ethertype == 0x8100: # VLAN-tagged packet
-                    vlan_header = packet[14:18]
-                    vlan_fields = struct.unpack("!HH", vlan_header)
-                    vlan_tci = vlan_fields[0]
-                    pcp = (vlan_tci >> 13) & 0x07 # PCP
-                    vlan_id = vlan_tci & 0x0FFF # VLAN ID
-                    ethertype_after_vlan = vlan_fields[1]
-
-                    print(f"VLAN Header Analysis:")
-                    print(f" Raw VLAN Header: {vlan_header.hex()}")
-                    print(f" PCP: {pcp}, VLAN ID: {vlan_id}, Ethertype: {hex(ethertype_after_vlan)}")
-                    
-                    if ethertype_after_vlan != 0x0800: # Verify if the packet is IPv4
-                        print(f"Skipping packet with unexpected Ethertype after VLAN: {hex(ethertype_after_vlan)}")
-                        continue
-
-                    ip_start = 18 # VLAN header
-                else:
-                    ip_start = 14 # Untagged packet
-
-                # Extract and validate IP header
-                ip_packet = packet[ip_start:]
-                print(f"IP Packet (raw hex): {ip_packet.hex()}")
-
-                # Check the length of the IP packet
-                if len(ip_packet) < 20:
-                    print("Error: IP payload too short to contain a valid IP header")
-                    continue
-
-                ip_header = ip_packet[:20]
-                ip_fields = struct.unpack("!BBHHHBBH4s4s", ip_header)
-                version_ihl = ip_fields[0]
-                version = version_ihl >> 4
-                ihl = version_ihl & 0x0F
-
-                if version != 4:
-                    print(f"Error: Invalid IP version {version}")
-                    continue
-
-                if ihl < 5:
-                    print(f"Error: Invalid IHL {ihl}")
-                    continue
+        def process_message(msg):
+            """
+            Processes steering commands received from the network.
+            Args:
+            msg (str): Command message in the format "<timestamp>,<left_duty_cycle>,
+            <right_duty_cycle>,<direction>".
+            """
+            try:
+                print(f"Processing message: {msg}")
+                parts = msg.split(",")
+                if len(parts) != 4:
+                    raise ValueError(f"Incorrect message format: {msg}")
                 
-                total_length = ip_fields[2]
+                left_duty_cycle = int(parts[1])
+                right_duty_cycle = int(parts[2])
+                direction = int(parts[3])
 
-                src_ip = socket.inet_ntoa(ip_fields[8])
-                dest_ip = socket.inet_ntoa(ip_fields[9])
+                # Actions based on direction
+                if direction == 0:
+                    stop()
+                elif direction == 1:
+                    advance_with_turn(left_duty_cycle, right_duty_cycle)
+                elif direction == -1:
+                    reverse_with_turn(left_duty_cycle, right_duty_cycle)
+                elif direction == 2:
+                    turn_right(left_duty_cycle, right_duty_cycle)
+                elif direction == -2:
+                    turn_left(left_duty_cycle, right_duty_cycle)
+                else:
+                    print(f"Unknown direction: {direction}")
+            except ValueError as ve:
+                print(f"Error in process_message: {ve}")
+            except Exception as e:
+                print(f"Unexpected error in process_message: {e}")
 
-                print(f"Packet from {src_ip} to {dest_ip}")
+        try:
+            while True:
+                # Receive a packet from the raw socket
+                packet, addr = raw_sock.recvfrom(65536)
+                print("Received packet from Gateway...")
 
-                # Verify source IP
-                if src_ip != MIDDLEMAN_IP:
-                    print(f"Ignoring packet from unexpected source: {src_ip}")
-                    continue
+                # Extract Ethernet header (14 bytes)
+                eth_header = packet[:14]
+                dest_mac, src_mac, ethertype = struct.unpack("!6s6sH", eth_header)
+                print("Ethernet Header Analysis:")
+                print(f" Destination MAC: {dest_mac.hex()} (bytes: {dest_mac})")
+                print(f" Source MAC: {src_mac.hex()} (bytes: {src_mac})")
+                print(f" Ethertype: {hex(ethertype)}")
 
-                # Extract payload
-                payload = ip_packet[20:]
-                try:
-                    decoded_payload = payload.decode("utf-8").strip()
-                    print(f"Decoded payload: {decoded_payload}")
-                except UnicodeDecodeError:
-                    print("Error decoding payload: Payload is not valid UTF-8")
-                    continue
+                # Check if the packet is VLAN-tagged
+                if ethertype == 0x8100 or ethertype == 0x0800:
+                    print("Identified VLAN packet!" if ethertype == 0x8100 else "Identified IPv4 packet!")
+                    if ethertype == 0x8100: # VLAN-tagged packet
+                        vlan_header = packet[14:18]
+                        vlan_fields = struct.unpack("!HH", vlan_header)
+                        vlan_tci = vlan_fields[0]
+                        pcp = (vlan_tci >> 13) & 0x07 # PCP
+                        vlan_id = vlan_tci & 0x0FFF # VLAN ID
+                        ethertype_after_vlan = vlan_fields[1]
 
-                try:
-                    # Decode the payload and process commands
-                    message = payload.decode("utf-8")
-                    print(f"Decoded message on server: {message}")
-                    if not message:
-                        print("Empty payload received on server")
+                        print(f"VLAN Header Analysis:")
+                        print(f" Raw VLAN Header: {vlan_header.hex()}")
+                        print(f" PCP: {pcp}, VLAN ID: {vlan_id}, Ethertype: {hex(ethertype_after_vlan)}")
+                        
+                        if ethertype_after_vlan != 0x0800: # Verify if the packet is IPv4
+                            print(f"Skipping packet with unexpected Ethertype after VLAN: {hex(ethertype_after_vlan)}")
+                            continue
+
+                        ip_start = 18 # VLAN header
+                    else:
+                        ip_start = 14 # Untagged packet
+
+                    # Extract and validate IP header
+                    ip_packet = packet[ip_start:]
+                    print(f"IP Packet (raw hex): {ip_packet.hex()}")
+
+                    # Check the length of the IP packet
+                    if len(ip_packet) < 20:
+                        print("Error: IP payload too short to contain a valid IP header")
                         continue
 
-                    buffer += message
+                    ip_header = ip_packet[:20]
+                    ip_fields = struct.unpack("!BBHHHBBH4s4s", ip_header)
+                    version_ihl = ip_fields[0]
+                    version = version_ihl >> 4
+                    ihl = version_ihl & 0x0F
 
-                    print(f"Buffer before processing: {buffer}")
-                    messages = buffer.split("\n")
-                    print(f"Messages extracted: {messages}")
+                    if version != 4:
+                        print(f"Error: Invalid IP version {version}")
+                        continue
 
-                    for msg in messages[:-1]:
-                        print(f"Processing message {msg}...")
-                        process_message(msg)
+                    if ihl < 5:
+                        print(f"Error: Invalid IHL {ihl}")
+                        continue
+                    
+                    total_length = ip_fields[2]
 
-                    buffer = messages[-1]
-                    print(f"Buffer after processing: {buffer}")
-                except Exception as e:
-                    print(f"Error decoding payload: {e}")
-            else:
-                print(f"Non-VLAN packet received with Ethertype: {hex(ethertype)}")
+                    src_ip = socket.inet_ntoa(ip_fields[8])
+                    dest_ip = socket.inet_ntoa(ip_fields[9])
 
-    except KeyboardInterrupt:
-        print("Stopping car steering...")
+                    print(f"Packet from {src_ip} to {dest_ip}")
 
-    finally:
-        raw_sock.close()
+                    # Verify source IP
+                    if src_ip != MIDDLEMAN_IP:
+                        print(f"Ignoring packet from unexpected source: {src_ip}")
+                        continue
+
+                    # Extract payload
+                    payload = ip_packet[20:]
+                    try:
+                        decoded_payload = payload.decode("utf-8").strip()
+                        print(f"Decoded payload: {decoded_payload}")
+                    except UnicodeDecodeError:
+                        print("Error decoding payload: Payload is not valid UTF-8")
+                        continue
+
+                    try:
+                        # Decode the payload and process commands
+                        message = payload.decode("utf-8")
+                        print(f"Decoded message on server: {message}")
+                        if not message:
+                            print("Empty payload received on server")
+                            continue
+
+                        buffer += message
+
+                        print(f"Buffer before processing: {buffer}")
+                        messages = buffer.split("\n")
+                        print(f"Messages extracted: {messages}")
+
+                        for msg in messages[:-1]:
+                            print(f"Processing message {msg}...")
+                            process_message(msg)
+
+                        buffer = messages[-1]
+                        print(f"Buffer after processing: {buffer}")
+                    except Exception as e:
+                        print(f"Error decoding payload: {e}")
+                else:
+                    print(f"Non-VLAN packet received with Ethertype: {hex(ethertype)}")
+
+        except KeyboardInterrupt:
+            print("Stopping car steering...")
+
+        finally:
+            raw_sock.close()
 
 # Start threads for video feed and car steering
 camera_thread = threading.Thread(target=camera_feed)
