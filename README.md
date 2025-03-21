@@ -83,7 +83,7 @@ python3 client.py
 **Note:** Root permissions may be required for raw sockets and GPIO access.
 
 ## 🖼️ System Topology
-[Joystick + Display] | Client | 5G Network | Gateway | TSN Switch | Server (Robot Car)
+![System Topology](topology_diagram_2.png)
 
 
 ## 📚 Future Improvements and Advancements
